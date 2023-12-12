@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace apiUniversidade.Controllers
 {
+    
     [ApiController]
     [Route("[controller]")]
     public class AutorizaController : ControllerBase
@@ -35,7 +36,7 @@ namespace apiUniversidade.Controllers
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var expiracao = configuration["TokenConfiguration:ExpireHours"];
+        var expiracao = _configuration["TokenConfiguration:ExpireHours"];
 
         var expiration = DateTime.UtcNow.AddHours(double.Parse(expiracao));
 
@@ -86,14 +87,14 @@ namespace apiUniversidade.Controllers
                 return BadRequest(result.Errors);
 
             await _signInManager.SignInAsync(user, false);
-            return Ok();
+            return Ok(GeraToken(model));
         }
     [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UsuarioDTO userInfo){
             var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent : false, lockoutOnFailure: false);
 
         if(result.Succeeded)
-            return Ok();
+            return Ok(GeraToken(userInfo));
         else{
             ModelState.AddModelError(string.Empty, "Login Invalido seu bobão");
             return BadRequest(ModelState);
