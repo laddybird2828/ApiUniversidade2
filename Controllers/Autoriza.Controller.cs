@@ -24,7 +24,7 @@ namespace apiUniversidade.Controllers
     [Route("[controller]")]
     public class AutorizaController : ControllerBase
     { 
-    private UsuarioToken GeraToken(UsuarioDTO userInfo){
+        private UsuarioToken GeraToken(UsuarioDTO userInfo){
         var claims = new[]{
             new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.UniqueName,userInfo.Email),
             new Claim("IFRN","TecInfo"),
